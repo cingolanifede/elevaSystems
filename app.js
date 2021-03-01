@@ -21,6 +21,12 @@ const historial_routes = require('./routes/historial');
 
 const app = express();
 
+//Cors para toda la app con '*'
+var corsOptions = {
+  origin: '*', // Reemplazar con dominio
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 //conectamos todos los middleware de terceros
 app.use(logger('dev')); //for develop
 app.use(bodyParser.urlencoded({

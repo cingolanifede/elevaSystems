@@ -6,8 +6,8 @@ const Mdw = require('../middleware/custom');
 const cors = require('../cors');
 
 //Users general
-router.post('/login', cors.corsWithOptions, UserController.login);
-router.post('/register', cors.corsWithOptions, UserController.register);
+router.post('/login', UserController.login);
+router.post('/register', UserController.register);
 
 //Manejo de Tecnicos / admin user only!
 router.post('/tecnico', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.addTecnico);
