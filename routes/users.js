@@ -6,13 +6,13 @@ const Mdw = require('../middleware/custom');
 const cors = require('../cors');
 
 //Users general
-router.post('/login', cors.cors, UserController.login);
-router.post('/register', cors.cors, UserController.register);
+router.post('/login', cors.corsWithOptions, UserController.login);
+router.post('/register', cors.corsWithOptions, UserController.register);
 
 //Manejo de Tecnicos / admin user only!
-router.post('/tecnico', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.addTecnico);
-router.put('/tecnico/:userId', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.editTecnico);
-router.delete('/tecnico/:userId', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.deleteUser);
+router.post('/tecnico', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.addTecnico);
+router.put('/tecnico/:userId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.editTecnico);
+router.delete('/tecnico/:userId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.deleteUser);
 
 //Get all tecnicos from empresaId
 router.get('/:empresaId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyUser, UserController.profile);
