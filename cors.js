@@ -1,21 +1,23 @@
-const express = require('express');
 const cors = require('cors');
-const app = express();
 
-const whitelist = ['http://localhost:3000', 'https://localhost:8100'];
-var corsOptionsDelegate = (req, callback) => {
-    var corsOptions;
-    // console.log('aca:', req.header('Origin'));
-    if (whitelist.indexOf(req.header('Origin')) !== -1) {
-        corsOptions = {
-            origin: true
-        };
-    } else {
-        corsOptions = {
-            origin: false
-        };
+const allowedOrigins = [
+    'capacitor://localhost',
+    'ionic://localhost',
+    'http://localhost',
+    'http://localhost:8080',
+    'http://localhost:8100',
+    'http://192.168.1.108:8100'
+];
+
+// Reflect the origin if it's in the allowed list or not defined (cURL, Postman, etc.)
+const corsOptionsDelegate = {
+    origin: (origin, callback) => {
+        if (allowedOrigins.includes(origin) || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Origin not allowed by CORS'));
+        }
     }
-    callback(null, corsOptions);
 };
 
 exports.cors = cors();
