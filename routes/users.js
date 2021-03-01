@@ -14,8 +14,11 @@ router.post('/tecnico', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, Use
 router.put('/tecnico/:userId', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.editTecnico);
 router.delete('/tecnico/:userId', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.deleteUser);
 
-//Get all users from empresa
+//Get all tecnicos from empresaId
 router.get('/:empresaId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyUser, UserController.profile);
+
+//Get user data
+router.get('/:id', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyUser, UserController.myProfile);
 
 //Not used!!
 

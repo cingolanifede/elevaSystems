@@ -102,6 +102,7 @@ let controller = {
         res.status(200).json({
           response: {
             error: false,
+            id: user._id,
             token
           }
         });
@@ -124,6 +125,20 @@ let controller = {
     console.log(allData);
     res.setHeader('Content-Type', 'application/json');
     return res.status(200).send(await Promise.all(allData));
+  },
+  myProfile: async (req, res, next) => {
+    const user = await User.find({
+      empresaId: req.params.id
+    }).populate('empresaId');
+    if (!user) {
+      return res.status(400).json({
+        error: 'User not found'
+      });
+    }
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json({
+      data: user
+    });
   },
   profile: async (req, res, next) => {
     const user = await User.find({
