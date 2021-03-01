@@ -128,7 +128,7 @@ let controller = {
   },
   myProfile: async (req, res, next) => {
     const user = await User.find({
-      empresaId: req.params.id
+      _id: req.params.id
     }).populate('empresaId');
     if (!user) {
       return res.status(400).json({
