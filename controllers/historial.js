@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-const Empresa = require('../models/empresa');
 const Cabina = require('../models/cabinas');
 const Historial = require('../models/historial');
 const error_types = require('../controllers/error_types');
@@ -43,7 +42,7 @@ let controller = {
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(newHist);
       const body = falla + ', ' + cab.direccion_edificio;
-      const push = await fcm.sendFCM(cab.nombre_edificio, 'Falla detectada', body, info);
+      const push = await fcm.sendFCM(cab.owner, 'Falla detectada', body, info);
       console.log('Push --> ', push);
     }
   },
@@ -55,6 +54,36 @@ let controller = {
       }).populate('tecnicoId').populate('cabinaId').populate('empresaId');
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(cab);
+    } catch (error) {
+      return next(new error_types.Error404(error));
+    }
+  },
+  editHistorial: async (req, res, next) => {
+    const historialId = req.params.historialId;
+    const hist = await Historial.findOneAndUpdate({
+      _id: historialId
+    }, req.body, {
+      upsert: true
+    });
+    if (hist) {
+      const result = await Historial.findById(historialId).populate('tecnicoId').populate('cabinaId').populate('empresaId');
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).json(result);
+    } else {
+      return next(new error_types.Error404('Historial ' + historialId + ' not found'));
+    }
+  },
+  deleteHistorial: async (req, res, next) => {
+    try {
+      const id = mongoose.Types.ObjectId(req.params.historialId);
+      const result = await Historial.findByIdAndDelete({
+        _id: id
+      });
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).json({
+        data: 'ok'
+      });
+
     } catch (error) {
       return next(new error_types.Error404(error));
     }

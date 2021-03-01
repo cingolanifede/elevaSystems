@@ -9,17 +9,18 @@ const cors = require('../cors');
 router.post('/login', cors.cors, UserController.login);
 router.post('/register', cors.cors, UserController.register);
 
-// router.get('/', cors.corsWithOptions, Mdw.verifyAuthenticated, UserController.all);
-
-//Tecnicos 
+//Manejo de Tecnicos / admin user only!
 router.post('/tecnico', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.addTecnico);
 router.put('/tecnico/:userId', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.editTecnico);
 router.delete('/tecnico/:userId', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.deleteUser);
 
-//Admin
+//Get all users from empresa
 router.get('/:empresaId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyUser, UserController.profile);
-router.put('/:userId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyUser, Mdw.verifyAdmin, UserController.addEmpresa);
 
+//Not used!!
+
+// router.put('/:userId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyUser, Mdw.verifyAdmin, UserController.addEmpresa);
+// router.get('/', cors.corsWithOptions, Mdw.verifyAuthenticated, UserController.all);
 /*Get server token using facebook´s token login system*/
 // router.get('/facebook/token', Mdw.facebook, UserController.facebookToken);
 

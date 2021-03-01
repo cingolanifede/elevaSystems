@@ -18,7 +18,6 @@ const index_routes = require('./routes/index');
 const user_routes = require('./routes/users');
 const cabinas_routes = require('./routes/cabina');
 const historial_routes = require('./routes/historial');
-// const empresa_routes = require('./routes/empresa');
 
 const app = express();
 
@@ -46,6 +45,5 @@ app.use('/', index_routes);
 app.use('/api/users', user_routes);
 app.use('/api/cabinas', cabinas_routes);
 app.use('/api/historial', historial_routes);
-// app.use('/api/empresa', empresa_routes);
 
 module.exports = app;
