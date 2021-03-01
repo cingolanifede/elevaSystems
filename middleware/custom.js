@@ -43,22 +43,6 @@ let middlewares = {
       return next(new error_types.Error403('You are not admin user!.'));
     }
   },
-  // verifyAuthor: async (req, res, next) => {
-  //   const strUserId = req.user._id.toString();
-  //   const dish = await Dish.findById(req.params.dishId);
-  //   if (dish) {
-  //     if (dish.comments.id(req.params.commentId).author == null) {
-  //       return next(new error_types.Error403('Author null.'));
-  //     }
-  //     if (dish.comments.id(req.params.commentId).author.toString() === strUserId) {
-  //       return next();
-  //     } else {
-  //       return next(new error_types.Error403('You are not authorized to perform this operation!.'));
-  //     }
-  //   } else {
-  //     return next(new error_types.Error403('Dish not found.'));
-  //   }
-  // },
   facebook: (req, res, next) => {
     passport.authenticate('facebook-token', (error, user, info) => {
       if (!user) {
