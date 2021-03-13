@@ -104,8 +104,9 @@ let controller = {
         }
 
         const payload = {
-          sub: user._id,
-          email: user.email
+          id: user._id,
+          email: user.email,
+          rol: user.rol
         };
 
         const token = jwt.sign(payload, config.JWT_KEY, {

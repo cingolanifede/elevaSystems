@@ -1,0 +1,28 @@
+[{
+    "group": "tecnico",
+    "permissions": [{
+        "resource": "users",
+        "methods": ["POST"],
+        "action": "allow"
+      },
+      {
+        "resource": "auth",
+        "methods": ["POST"],
+        "action": "allow"
+      },
+      {
+        "resource": "docs",
+        "methods": ["GET"],
+        "action": "allow"
+      }
+    ]
+  },
+  {
+    "group": "admin",
+    "permissions": [{
+      "resource": "*",
+      "methods": ["POST", "PUT", "GET", "DELETE"],
+      "action": "allow"
+    }]
+  }
+]
