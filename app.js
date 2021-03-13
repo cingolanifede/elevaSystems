@@ -26,7 +26,6 @@ const app = express();
 /* ACL config */
 let configObject = {
   filename: 'nacl.json',
-  baseUrl: version,
   roleSearchPath: 'user.rol',
   defaultRole: 'tecnico'
 };
