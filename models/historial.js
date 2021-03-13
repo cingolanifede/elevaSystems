@@ -45,6 +45,12 @@ const HistorialShcema = new Schema({
     pendiente: {
         type: String
     },
+    finishedAt: {
+        type: Date
+    },
+    selected: {
+        type: Boolean
+    },
     result: {
         type: String
     }

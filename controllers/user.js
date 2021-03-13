@@ -2,6 +2,8 @@ const User = require('../models/user');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const Joi = require('@hapi/joi');
 const config = require('../config');
 const helper = require('../helpers/helper');
@@ -17,6 +19,16 @@ const schemaRegister = Joi.object({
   email: Joi.string().required().email(),
   password: Joi.string().empty().required(),
   rol: Joi.string().empty().required()
+});
+
+const schemaRegisterTech = Joi.object({
+  firstName: Joi.string().empty().required(),
+  lastName: Joi.string().empty().required(),
+  email: Joi.string().required().email(),
+  password: Joi.string().empty().required(),
+  rol: Joi.string().empty().required(),
+  empresaId: Joi.string().empty().required(),
+  selected: Joi.bool().empty().required()
 });
 
 const schemaLogin = Joi.object({
@@ -109,6 +121,31 @@ let controller = {
       }
     })(req, res);
   },
+  changePsw: async (req, res, next) => {
+    const userId = req.params.userId;
+    const oldP = req.body.oldPassword;
+    const newP = req.body.newPassword;
+    const user = await User.findOne({
+      _id: userId
+    });
+    if (!user) {
+      return next(new error_types.Error404('User ' + userId + ' not found'));
+    }
+    const validPassword = await user.isValidPassword(oldP);
+    console.log(validPassword);
+    if (!validPassword) {
+      return next(new error_types.Error404('Password ingresado no corresponde'));
+    }
+    const hash = await bcrypt.hash(newP, 10);
+    user.password = hash;
+    const result = await user.save();
+    if (result) {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).json(result);
+    } else {
+      return next(new error_types.Error404('User ' + userId + ' not found'));
+    }
+  },
   all: async (req, res, next) => {
     const user = await User.find().populate('empresaId');
     if (!user) {
@@ -127,7 +164,7 @@ let controller = {
     return res.status(200).send(await Promise.all(allData));
   },
   myProfile: async (req, res, next) => {
-    const user = await User.find({
+    const user = await User.findOne({
       _id: req.params.id
     }).populate('empresaId');
     if (!user) {
@@ -136,24 +173,26 @@ let controller = {
       });
     }
     res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({
-      data: user
-    });
+    res.status(200).json(user);
   },
   profile: async (req, res, next) => {
     const user = await User.find({
       empresaId: req.params.empresaId,
       rol: 'tecnico'
-    }).populate('empresaId');
+    });
     if (!user) {
       return res.status(400).json({
         error: 'User not found'
       });
     }
+    let allData = [];
+    for (let i = 0; i < user.length; i++) {
+      const response = await helper.deleteObj(user[i].toObject());
+      allData.push(response);
+    }
+    console.log(allData);
     res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({
-      data: user
-    });
+    return res.status(200).send(await Promise.all(allData));
   },
   addEmpresa: async (req, res, next) => {
     const user = await User.findById(req.params.userId);
@@ -171,7 +210,7 @@ let controller = {
     try {
       const {
         error
-      } = schemaRegister.validate(req.body);
+      } = schemaRegisterTech.validate(req.body);
 
       if (error) {
         return res.status(400).json({
@@ -184,7 +223,7 @@ let controller = {
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
       const rol = req.body.rol;
-      const empresaId = req.user._id;
+      const empresaId = req.params.empresaId;
       const isEmailExist = await User.findOne({
         email
       });
@@ -194,10 +233,10 @@ let controller = {
         });
       } else {
         const user = await User.create({
-          email,
-          password,
           firstName,
           lastName,
+          email,
+          password,
           rol,
           empresaId
         });

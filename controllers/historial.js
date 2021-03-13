@@ -48,12 +48,21 @@ let controller = {
   },
   getHistorial: async (req, res, next) => {
     try {
+      const queryLimit = Number(req.query.limit) || 5;
+      const querySkip = Number(req.query.skip) || 0;
       const empresaId = req.params.empresaId;
       const cab = await Historial.find({
         empresaId
-      }).populate('tecnicoId').populate('cabinaId').populate('empresaId');
+      }).limit(queryLimit).skip(queryLimit*querySkip).populate('tecnicoId').populate('cabinaId');
+      const totalHistorial = await Historial.find({
+        empresaId
+      }).countDocuments();
+
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(cab);
+      res.status(200).json({
+        cab,
+        totalHistorial
+      });
     } catch (error) {
       return next(new error_types.Error404(error));
     }
@@ -66,7 +75,7 @@ let controller = {
       upsert: true
     });
     if (hist) {
-      const result = await Historial.findById(historialId).populate('tecnicoId').populate('cabinaId').populate('empresaId');
+      const result = await Historial.findById(historialId).populate('tecnicoId').populate('cabinaId');
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(result);
     } else {

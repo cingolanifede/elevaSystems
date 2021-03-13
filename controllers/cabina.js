@@ -11,6 +11,18 @@ let controller = {
       data: newCabina
     });
   },
+  getAll: async (req, res, next) => {
+    try {
+      const empresaId = req.params.empresaId;
+      const cab = await Cabina.find({
+        owner: empresaId
+      }).populate('owner');
+      res.setHeader('Content-Type', 'application/json');
+      res.status(200).json(cab);
+    } catch (error) {
+      return next(new error_types.Error404(error));
+    }
+  },
   editCabina: async (req, res, next) => {
     const cabinaId = req.params.cabinaId;
     const cabina = await Cabina.findOneAndUpdate({
@@ -34,7 +46,7 @@ let controller = {
       });
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json({
-        data: 'ok'
+        result: true
       });
 
     } catch (error) {

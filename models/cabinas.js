@@ -36,7 +36,7 @@ const CabinaShcema = new Schema({
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Empresa'
+        ref: 'User'
     },
     comments: commentSchema
 }, {

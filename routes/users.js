@@ -8,14 +8,13 @@ const cors = require('../cors');
 //Users general
 router.post('/login', UserController.login);
 router.post('/register', UserController.register);
+router.patch('/changePassword/:userId', cors.corsWithOptions, Mdw.verifyAuthenticated, UserController.changePsw);
 
 //Manejo de Tecnicos / admin user only!
-router.post('/tecnico', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.addTecnico);
-router.put('/tecnico/:userId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.editTecnico);
+router.post('/tecnico/:empresaId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.addTecnico);
+router.get('/tecnico/:empresaId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyUser, UserController.profile);
+router.patch('/tecnico/:userId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.editTecnico);
 router.delete('/tecnico/:userId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyAdmin, UserController.deleteUser);
-
-//Get all tecnicos from empresaId
-router.get('/:empresaId', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyUser, UserController.profile);
 
 //Get user data
 router.get('/:id', cors.corsWithOptions, Mdw.verifyAuthenticated, Mdw.verifyUser, UserController.myProfile);

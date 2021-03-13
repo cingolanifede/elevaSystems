@@ -7,7 +7,8 @@ const Mdw = require('../middleware/custom');
 const cors = require('../cors');
 
 router.post('/', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, CabinaController.addCabina);
-router.put('/:cabinaId', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, CabinaController.editCabina);
+router.get('/:empresaId', cors.cors, Mdw.verifyAuthenticated, CabinaController.getAll);
+router.patch('/:cabinaId', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, CabinaController.editCabina);
 router.delete('/:cabinaId', cors.cors, Mdw.verifyAuthenticated, Mdw.verifyAdmin, CabinaController.deleteCabina);
 
 module.exports = router;
