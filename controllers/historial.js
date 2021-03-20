@@ -8,11 +8,7 @@ const Fail = require('../helpers/fail');
 
 let controller = {
   new: async (req, res, next) => {
-    const chip = req.body.chip;
-    const na = req.body.na;
-    const cod = req.body.evento;
-    const sb = req.body.sb;
-
+    const {chip, na, evento, sb} = req.body.sb;
     const cab = await Cabina.findOne({
       chip_cabina: chip
     });
@@ -24,13 +20,13 @@ let controller = {
         signal_strenght,
         batery_voltage
       } = sb.split('-');
-      const falla = Fail.fallas2String(cod);
+      const falla = Fail.fallas2String(evento);
       const info = {
         cabinaId: cab._id,
         empresaId: cab.owner,
         closed: false,
         alerta: true,
-        cod: cod,
+        cod: evento,
         evento: falla,
         numero_ascensor: na,
         timestamp: +new Date(),
@@ -68,7 +64,7 @@ let controller = {
     }
   },
   editHistorial: async (req, res, next) => {
-    const historialId = req.params.historialId;
+    const historialId = req.params.id;
     const hist = await Historial.findOneAndUpdate({
       _id: historialId
     }, req.body, {
@@ -84,8 +80,8 @@ let controller = {
   },
   deleteHistorial: async (req, res, next) => {
     try {
-      const id = mongoose.Types.ObjectId(req.params.historialId);
-      const result = await Historial.findByIdAndDelete({
+      const id = mongoose.Types.ObjectId(req.params.id);
+      await Historial.findByIdAndDelete({
         _id: id
       });
       res.setHeader('Content-Type', 'application/json');

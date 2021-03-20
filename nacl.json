@@ -11,8 +11,8 @@
         "action": "allow"
       },
       {
-        "resource": "docs",
-        "methods": ["GET"],
+        "resource": "historiales/*",
+        "methods": ["POST"],
         "action": "allow"
       }
     ]

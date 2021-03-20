@@ -12,20 +12,17 @@ const tokenValidation = require('./middleware/token.middleware');
 
 require('./authentication');
 
+const index_routes = require('./routes/index');
+
 //mongoDB connection
 mongoDb.connectDb();
-
-//Routes
-const index_routes = require('./routes/index');
-const user_routes = require('./routes/users');
-const cabinas_routes = require('./routes/cabina');
-const historial_routes = require('./routes/historial');
 
 const app = express();
 
 /* ACL config */
 let configObject = {
   filename: 'nacl.json',
+  baseUrl: config.VERSION,
   roleSearchPath: 'user.rol',
   defaultRole: 'tecnico'
 };
@@ -43,6 +40,7 @@ var corsOptions = {
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
+
 //conectamos todos los middleware de terceros
 app.use(logger('dev')); //for develop
 app.use(express.urlencoded({
@@ -70,8 +68,5 @@ app.use(acl.authorize);
 
 //conectamos todos los routers
 app.use('/', index_routes);
-app.use('/api/users', user_routes);
-app.use('/api/cabinas', cabinas_routes);
-app.use('/api/historial', historial_routes);
 
 module.exports = app;

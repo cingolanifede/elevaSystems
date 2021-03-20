@@ -49,11 +49,14 @@ let controller = {
         });
       }
 
-      const email = req.body.email;
-      const password = req.body.password;
-      const firstName = req.body.firstName;
-      const lastName = req.body.lastName;
-      const rol = req.body.rol;
+      const {
+        email,
+        password,
+        firstName,
+        lastName,
+        rol,
+        empresaId
+      } = req.body;
       const isEmailExist = await User.findOne({
         email
       });
@@ -68,6 +71,7 @@ let controller = {
           password,
           firstName,
           lastName,
+          empresaId,
           rol
         });
         const result = {
@@ -85,6 +89,7 @@ let controller = {
     }
   },
   login: (req, res, next) => {
+    console.log('login');
     passport.authenticate('local', {
       session: false
     }, (error, user) => {
@@ -123,7 +128,7 @@ let controller = {
     })(req, res);
   },
   changePsw: async (req, res, next) => {
-    const userId = req.params.userId;
+    const userId = req.params.id;
     const oldP = req.body.oldPassword;
     const newP = req.body.newPassword;
     const user = await User.findOne({
@@ -147,8 +152,10 @@ let controller = {
       return next(new error_types.Error404('User ' + userId + ' not found'));
     }
   },
-  all: async (req, res, next) => {
-    const user = await User.find().populate('empresaId');
+  getAll: async (req, res, next) => {
+    const user = await User.find({
+      empresaId: req.params.id
+    }).populate('empresaId');
     if (!user) {
       return res.status(400).json({
         error: 'Users not found'
@@ -164,7 +171,7 @@ let controller = {
     res.setHeader('Content-Type', 'application/json');
     return res.status(200).send(await Promise.all(allData));
   },
-  myProfile: async (req, res, next) => {
+  getprofile: async (req, res, next) => {
     const user = await User.findOne({
       _id: req.params.id
     }).populate('empresaId');
@@ -176,101 +183,25 @@ let controller = {
     res.setHeader('Content-Type', 'application/json');
     res.status(200).json(user);
   },
-  profile: async (req, res, next) => {
-    const user = await User.find({
-      empresaId: req.params.empresaId,
-      rol: 'tecnico'
-    });
-    if (!user) {
-      return res.status(400).json({
-        error: 'User not found'
-      });
-    }
-    let allData = [];
-    for (let i = 0; i < user.length; i++) {
-      const response = await helper.deleteObj(user[i].toObject());
-      allData.push(response);
-    }
-    console.log(allData);
-    res.setHeader('Content-Type', 'application/json');
-    return res.status(200).send(await Promise.all(allData));
-  },
-  addEmpresa: async (req, res, next) => {
-    const user = await User.findById(req.params.userId);
-    if (user && req.body.empresaId != null) {
-      user.empresaId = mongoose.Types.ObjectId(req.body.empresaId);
-      const userUpdate = await user.save();
-      const result = await User.findById(userUpdate._id).populate('empresaId');
-      res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(result);
-    } else {
-      return next(new error_types.Error404('Comment ' + req.params.userId + ' not found'));
-    }
-  },
-  addTecnico: async (req, res, next) => {
-    try {
-      const {
-        error
-      } = schemaRegisterTech.validate(req.body);
-
-      if (error) {
-        return res.status(400).json({
-          error: error.details[0].message
-        });
-      }
-
-      const email = req.body.email;
-      const password = req.body.password;
-      const firstName = req.body.firstName;
-      const lastName = req.body.lastName;
-      const rol = req.body.rol;
-      const empresaId = req.params.empresaId;
-      const isEmailExist = await User.findOne({
-        email
-      });
-      if (isEmailExist) {
-        return res.status(400).json({
-          error: 'email already exists'
-        });
-      } else {
-        const user = await User.create({
-          firstName,
-          lastName,
-          email,
-          password,
-          rol,
-          empresaId
-        });
-        const result = {
-          message: 'User created successful',
-          user
-        };
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).json(result);
-      }
-    } catch (error) {
-      next(error);
-    }
-  },
-  editTecnico: async (req, res, next) => {
-    const techId = req.params.userId;
+  editUser: async (req, res, next) => {
+    const userId = req.params.id;
     const user = await User.findOneAndUpdate({
-      _id: techId
+      _id: userId
     }, req.body, {
       upsert: true
     });
     if (user) {
-      const result = await User.findById(techId).populate('empresaId');
+      const result = await User.findById(userId).populate('empresaId');
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(result);
     } else {
-      return next(new error_types.Error404('Tecnico ' + techId + ' not found'));
+      return next(new error_types.Error404('Tecnico ' + userId + ' not found'));
     }
   },
   deleteUser: async (req, res, next) => {
     try {
-      const result = await User.findOneAndDelete({
-        _id: req.params.userId
+      await User.findOneAndDelete({
+        _id: req.params.id
       });
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json({

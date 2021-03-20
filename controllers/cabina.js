@@ -24,7 +24,7 @@ let controller = {
     }
   },
   editCabina: async (req, res, next) => {
-    const cabinaId = req.params.cabinaId;
+    const cabinaId = req.params.id;
     const cabina = await Cabina.findOneAndUpdate({
       _id: cabinaId
     }, req.body, {
@@ -40,7 +40,7 @@ let controller = {
   },
   deleteCabina: async (req, res, next) => {
     try {
-      const id = mongoose.Types.ObjectId(req.params.cabinaId);
+      const id = mongoose.Types.ObjectId(req.params.id);
       const result = await Cabina.findByIdAndDelete({
         _id: id
       });

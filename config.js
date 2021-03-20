@@ -1,5 +1,6 @@
 module.exports = {
     PORT: process.env.PORT || 3000,
+    VERSION: process.env.VERSION || 'v1',
     JWT_KEY: process.env.JWT_KEY || 'elevasystems',
     JWT_ALGORITHM: process.env.JWT_ALGORITHM || 'HS256',
     JWT_LIFETIME: process.env.JWT_LIFETIME || 86400000,
