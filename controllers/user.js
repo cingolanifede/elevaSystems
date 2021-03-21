@@ -15,20 +15,11 @@ const schemaRegister = Joi.object({
   firstName: Joi.string().empty().required(),
   lastName: Joi.string().empty().required(),
   empresaId: Joi.string().empty(),
+  owner: Joi.string().empty(),
   email: Joi.string().required().email(),
   password: Joi.string().empty().required(),
   rol: Joi.string().empty().required(),
   selected: Joi.bool().allow(null)
-});
-
-const schemaRegisterTech = Joi.object({
-  firstName: Joi.string().empty().required(),
-  lastName: Joi.string().empty().required(),
-  email: Joi.string().required().email(),
-  password: Joi.string().empty().required(),
-  rol: Joi.string().empty().required(),
-  empresaId: Joi.string().empty().required(),
-  selected: Joi.bool().empty().required()
 });
 
 const schemaLogin = Joi.object({
@@ -58,7 +49,8 @@ let controller = {
         firstName,
         lastName,
         rol,
-        empresaId
+        empresaId,
+        owner
       } = req.body;
       const isEmailExist = await User.findOne({
         email
