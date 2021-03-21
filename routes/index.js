@@ -10,6 +10,7 @@ const version = config.VERSION;
 
 /** Users */
 router.post(`/${version}/auth`, userController.login);
+router.post(`/${version}/activate`, userController.activate);
 
 router.post(`/${version}/users`, userController.register);
 router.get(`/${version}/users/:id`, userController.getAll);

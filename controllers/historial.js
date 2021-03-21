@@ -12,7 +12,6 @@ let controller = {
     const cab = await Cabina.findOne({
       chip_cabina: chip
     });
-    console.log(cab);
     if (cab == null) {
       return next(new error_types.Error404('Cabina not found.'));
     } else {
@@ -49,7 +48,7 @@ let controller = {
       const empresaId = req.params.empresaId;
       const cab = await Historial.find({
         empresaId
-      }).limit(queryLimit).skip(queryLimit*querySkip).populate('tecnicoId').populate('cabinaId');
+      }).populate('tecnicoId', '-password').populate('cabinaId');
       const totalHistorial = await Historial.find({
         empresaId
       }).countDocuments();
@@ -71,7 +70,7 @@ let controller = {
       upsert: true
     });
     if (hist) {
-      const result = await Historial.findById(historialId).populate('tecnicoId').populate('cabinaId');
+      const result = await Historial.findById(historialId).populate('tecnicoId', '-password').populate('cabinaId');
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(result);
     } else {

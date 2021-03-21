@@ -8,17 +8,17 @@ const Joi = require('@hapi/joi');
 const config = require('../config');
 const helper = require('../helpers/helper');
 const error_types = require('../controllers/error_types');
-const {
-  findOneAndUpdate
-} = require('../models/user');
+const mail = require('../helpers/mail');
 
 //Validations
 const schemaRegister = Joi.object({
   firstName: Joi.string().empty().required(),
   lastName: Joi.string().empty().required(),
+  empresaId: Joi.string().empty(),
   email: Joi.string().required().email(),
   password: Joi.string().empty().required(),
-  rol: Joi.string().empty().required()
+  rol: Joi.string().empty().required(),
+  selected: Joi.bool().allow(null)
 });
 
 const schemaRegisterTech = Joi.object({
@@ -37,6 +37,9 @@ const schemaLogin = Joi.object({
 });
 
 let controller = {
+  activate: (req, res, next) => {
+
+  },
   register: async (req, res, next) => {
     try {
       const {
@@ -79,6 +82,7 @@ let controller = {
           message: 'Signup successful',
           user
         };
+        // mail.sendMail();
         res.setHeader('Content-Type', 'application/json');
         res.status(200).json({
           response: result
@@ -107,7 +111,11 @@ let controller = {
             error: error.details[0].message
           });
         }
-
+        if (!user.active && user.rol == 'admin') {
+          return res.status(401).json({
+            error: 'pending'
+          });
+        }
         const payload = {
           id: user._id,
           email: user.email,
@@ -120,7 +128,7 @@ let controller = {
         res.status(200).json({
           response: {
             error: false,
-            id: user._id,
+            user,
             token
           }
         });
@@ -155,7 +163,7 @@ let controller = {
   getAll: async (req, res, next) => {
     const user = await User.find({
       empresaId: req.params.id
-    }).populate('empresaId');
+    }).populate('empresaId', '-password');
     if (!user) {
       return res.status(400).json({
         error: 'Users not found'
@@ -167,14 +175,13 @@ let controller = {
       const response = await helper.deleteObj(user[i].toObject());
       allData.push(response);
     }
-    console.log(allData);
     res.setHeader('Content-Type', 'application/json');
     return res.status(200).send(await Promise.all(allData));
   },
   getprofile: async (req, res, next) => {
     const user = await User.findOne({
       _id: req.params.id
-    }).populate('empresaId');
+    }).populate('empresaId', '-password');
     if (!user) {
       return res.status(400).json({
         error: 'User not found'
@@ -191,7 +198,7 @@ let controller = {
       upsert: true
     });
     if (user) {
-      const result = await User.findById(userId).populate('empresaId');
+      const result = await User.findById(userId).populate('empresaId', '-password');
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(result);
     } else {
