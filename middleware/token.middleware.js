@@ -8,7 +8,7 @@ const tokenValidation = async (req, res, next) => {
 
   token = token.replace('Bearer ', '');
 
-  jwt.verify(token, config.config.jwtLifeTime, function (err, tokenDecode) {
+  jwt.verify(token, config.config.tokenSecret, function (err, tokenDecode) {
     if (err) {
       res.status(401).send({
         status: 401,
