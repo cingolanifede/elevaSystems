@@ -8,10 +8,8 @@ const Fail = require('../helpers/fail');
 
 let controller = {
   new: async (req, res, next) => {
-    const {chip, na, evento, sb} = req.body.sb;
-    const cab = await Cabina.findOne({
-      chip_cabina: chip
-    });
+    const {chip, na, evento, sb} = req.body;
+    const cab = await Cabina.findOne({chip_cabina: chip });
     if (cab == null) {
       return next(new error_types.Error404('Cabina not found.'));
     } else {

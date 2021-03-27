@@ -1,16 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const config = require('../config');
 
 const userController = require('../controllers/user');
 const cabinaController = require('../controllers/cabina');
 const historialController = require('../controllers/historial');
 
-const version = config.VERSION;
+const version = 'v1';
 
 /** Users */
 router.post(`/${version}/auth`, userController.login);
-router.post(`/${version}/activate`, userController.activate);
+router.post(`/${version}/activate/:email`, userController.activate);
 
 router.post(`/${version}/users`, userController.register);
 router.get(`/${version}/users/:id`, userController.getAll);

@@ -1,0 +1,332 @@
+{
+	"info": {
+		"_postman_id": "225f1b2a-db7b-4905-ba1c-8ac7fcf2e21f",
+		"name": "Eleva G&C",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Notificacion Push FCM - Test",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "key=AAAAzdJXH6U:APA91bH7xxBQqGg1rTcDqPMMA8lOFRczNwArqV1H5o5CPWvcP8WSghriDDFuN7s87f4nLs0iTKHWZshqJV-Q3ZYPfyKIknCWzrxkwD3Kc6UKdDfkgl6xdjY3BvzWKaCMnZL6k4QfokqK",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"to\": \"/topics/5fbab7afd5eeed4048f0877f\",\r\n  \"notification\": {\r\n    \"title\": \"Testing Eleva G&C\",\r\n    \"body\": \"Welcome msg2\"\r\n  },\r\n  \"data\": {\r\n    \"story_id\": \"story_12345\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://fcm.googleapis.com/fcm/send",
+					"protocol": "https",
+					"host": [
+						"fcm",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"fcm",
+						"send"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear Alarma_SERVER_SHORT",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"chip\": \"8954076144539782131f\",\r\n    \"na\": \"1\",\r\n    \"evento\": \"F1\",\r\n    \"sb\": \"31-4\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3002/api/historial",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"historial"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Publicar estado Bateria&Señal",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/historials/cabinaStatus?chip=223123456789&batery=12.4&signal=104",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"historials",
+						"cabinaStatus"
+					],
+					"query": [
+						{
+							"key": "chip",
+							"value": "223123456789"
+						},
+						{
+							"key": "batery",
+							"value": "12.4"
+						},
+						{
+							"key": "signal",
+							"value": "104"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registrar usuario",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Federico\",\r\n    \"lastName\": \"Cingolani\",\r\n    \"email\": \"cingolanifede@gmail.com\",\r\n    \"password\": \"fede\",\r\n    \"rol\":\"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3002/v1/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login usuario",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"cingolanifede@gmail.com\",\r\n    \"password\": \"fede\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3002/api/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET all users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDNiOTBjMmYxMjRiZTMwODRjNDM2N2QiLCJlbWFpbCI6ImNpbmdvbGFuaWZlZGVAZ21haWwuY29tIiwiaWF0IjoxNjE0NTE2NDg3LCJleHAiOjE2MTQ2MDI4ODd9.zpE3aSVkHEhspT3ewR9EyOFL3Rg_64Y1dZ8LI-eaFF4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Origin",
+						"value": "http://localhost:30002",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3002/api/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Agregar cabina",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDNiZmRjZTNiZTZjZDU5ODA1YjdkNTMiLCJlbWFpbCI6ImNpbmdvbGFuaWZlZGVAZ21haWwuY29tIiwiaWF0IjoxNjE0NTQ0MzQ4LCJleHAiOjE2MTQ2MzA3NDh9.dfxNztm3mnPjE6U8Mn0s2QTXrf4MzDktFsz9j1axlTc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre_edificio\": \"Edificio #1\",\r\n    \"direccion_edificio\": \"Catamarca 4373\",\r\n    \"numero_ascensor\": \"3\",\r\n    \"chip_cabina\": \"123456\",\r\n    \"chip_portadora\": \"Claro\",\r\n    \"numero_llave\": \"1\",\r\n    \"ciudad\": \"Mar del Plata\",\r\n    \"owner\": \"603bfdce3be6cd59805b7d53\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3002/api/cabinas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"cabinas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET historial by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDNiOTBjMmYxMjRiZTMwODRjNDM2N2QiLCJlbWFpbCI6ImNpbmdvbGFuaWZlZGVAZ21haWwuY29tIiwiaWF0IjoxNjE0NTE2NDg3LCJleHAiOjE2MTQ2MDI4ODd9.zpE3aSVkHEhspT3ewR9EyOFL3Rg_64Y1dZ8LI-eaFF4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3002/api/historial/603baf73be64e74d54326528",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"historial",
+						"603baf73be64e74d54326528"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET users by id",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDNkMmQyNDU0YzNiMWEzNTc1N2I0MDEiLCJlbWFpbCI6ImNpbmdvbGFuaWZlZGVAZ21haWwuY29tIiwiaWF0IjoxNjE0NjI1Nzc0LCJleHAiOjE2MTQ3MTIxNzR9.cu109c-MmAngWihqWzzgFxZgn91QHiESvBuHvv7vVBA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Origin",
+						"value": "http://localhost:8100",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3002/api/users/603bfe033be6cd59805b7d55",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"users",
+						"603bfe033be6cd59805b7d55"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

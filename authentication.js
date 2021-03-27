@@ -33,8 +33,7 @@ passport.use(new LocalStrategy({
 /** config de estrategia jwt de passport ******/
 let opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = config.JWT_KEY;
-opts.algorithms = config.JWT_ALGORITHM;
+opts.secretOrKey = config.config.tokenSecret;
 
 passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
   try {
@@ -50,37 +49,36 @@ passport.use(new JwtStrategy(opts, async (jwt_payload, done) => {
   }
 }));
 
-
-passport.use(new FacebookTokenStrategy({
-  clientID: config.FACEBOOK_CLIENT_ID,
-  clientSecret: config.FACEBOOK_CLIENT_SECRET,
-  profileFields: ['id', 'displayName', 'photos', 'email'],
-  fbGraphVersion: 'v3.0',
-  enableProof: true
-}, async (accessToken, refreshToken, profile, done) => {
-  try {
-    const user = await User.findOne({
-      facebookId: profile.id
-    });
-    if (user !== null) {
-      console.log('User exists');
-      return done(null, user);
-    } else {
-      const user = new User({
-        email: profile.displayName
-      });
-      user.facebookId = profile.id;
-      user.firstName = profile.name.givenName;
-      user.lastName = profile.name.familyName;
-      user.save((err, result) => {
-        if (err)
-          return done(err, false);
-        else
-          // console.log('User saved: ', result);
-        return done(null, result);
-      });
-    }
-  } catch (error) {
-    return done(error, false);
-  }
-}));
+// passport.use(new FacebookTokenStrategy({
+//   clientID: config.FACEBOOK_CLIENT_ID,
+//   clientSecret: config.FACEBOOK_CLIENT_SECRET,
+//   profileFields: ['id', 'displayName', 'photos', 'email'],
+//   fbGraphVersion: 'v3.0',
+//   enableProof: true
+// }, async (accessToken, refreshToken, profile, done) => {
+//   try {
+//     const user = await User.findOne({
+//       facebookId: profile.id
+//     });
+//     if (user !== null) {
+//       console.log('User exists');
+//       return done(null, user);
+//     } else {
+//       const user = new User({
+//         email: profile.displayName
+//       });
+//       user.facebookId = profile.id;
+//       user.firstName = profile.name.givenName;
+//       user.lastName = profile.name.familyName;
+//       user.save((err, result) => {
+//         if (err)
+//           return done(err, false);
+//         else
+//           // console.log('User saved: ', result);
+//         return done(null, result);
+//       });
+//     }
+//   } catch (error) {
+//     return done(error, false);
+//   }
+// }));

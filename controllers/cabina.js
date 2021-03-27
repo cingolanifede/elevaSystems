@@ -16,7 +16,7 @@ let controller = {
       const empresaId = req.params.empresaId;
       const cab = await Cabina.find({
         owner: empresaId
-      }).populate('owner');
+      }).populate('owner', '-password');
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(cab);
     } catch (error) {
@@ -31,7 +31,7 @@ let controller = {
       upsert: true
     });
     if (cabina) {
-      const result = await Cabina.findById(cabinaId).populate('owner');
+      const result = await Cabina.findById(cabinaId).populate('owner','-password');
       res.setHeader('Content-Type', 'application/json');
       res.status(200).json(result);
     } else {

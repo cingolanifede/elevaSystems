@@ -33,9 +33,7 @@ let controller = {
   },
   register: async (req, res, next) => {
     try {
-      const {
-        error
-      } = schemaRegister.validate(req.body);
+      const { error } = schemaRegister.validate(req.body);
 
       if (error) {
         return res.status(400).json({
@@ -81,7 +79,7 @@ let controller = {
         });
       }
     } catch (error) {
-      next(err);
+      next(error);
     }
   },
   login: (req, res, next) => {
@@ -94,9 +92,7 @@ let controller = {
           error: 'User login fail'
         });
       } else {
-        const {
-          error
-        } = schemaLogin.validate(req.body);
+        const { error } = schemaLogin.validate(req.body);
 
         if (error) {
           return res.status(400).json({
@@ -114,9 +110,10 @@ let controller = {
           rol: user.rol
         };
 
-        const token = jwt.sign(payload, config.JWT_KEY, {
-          expiresIn: config.JWT_LIFETIME // expires
+        const token = jwt.sign(payload, config.config.jwtLifeTime, {
+          expiresIn: config.config.jwtLifeTime // expires
         });
+        user.password = undefined; //hide password
         res.status(200).json({
           response: {
             error: false,

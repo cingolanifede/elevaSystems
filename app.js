@@ -1,13 +1,12 @@
 require('dotenv').config();
 const express = require('express');
-const bodyParser = require('body-parser');
 const acl = require('express-acl');
 const passport = require('passport');
 const path = require('path');
 const cors = require('cors');
 const logger = require('morgan');
 const config = require('./config');
-const mongoDb = require('./helpers/connection');
+const mongoDb = require('./connection');
 const tokenValidation = require('./middleware/token.middleware');
 
 require('./authentication');

@@ -1,0 +1,37 @@
+version: '3.7'
+x-common-variables: &common-variables
+  NODE_ENV: local
+  DB_MAIN_HOST: db
+  DB_MAIN_USER: root
+  DB_MAIN_PASS: pass12345
+  DB_MAIN_NAME: eleva
+  TOKEN_SECRET: elevasystems
+services:
+  local:
+    build:
+      context: .
+      target: builder
+    image: elevasystems-backend
+    volumes:
+      - ./:/app/
+    container_name: elevasystems-backend_local
+    environment: *common-variables
+    depends_on:
+      - db
+    ports:
+      - '3100:3100'
+    tty: true
+    command: /bin/sh -c "npm install && npm run start-dev"
+
+  db:
+    image: mongo
+    container_name: elevasystems-database-mongo
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    volumes:
+      - ~/./dbdata:/data/db
+
+networks:
+  default:
+    name: elevasystems-backend

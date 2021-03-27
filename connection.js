@@ -1,13 +1,12 @@
 const mongoose = require('mongoose');
-const config = require('../config');
+const config = require('./config');
+const db_path = `mongodb://${config.mainDatabase.host}:27017/${config.mainDatabase.name}`;
 
-const db_path = `mongodb://${config.MONGODB_HOST}:${config.MONGODB_DATABASE_PORT}/${config.MONGODB_DATABASE}`;
-//const db_path = mongodb+srv://<username>:<password>@cluster0.ncdk5.mongodb.net/<dbname>?retryWrites=true&w=majority
-
+// const db_path = `mongodb://${config.mainDatabase.user}:${config.mainDatabase.pass}@${config.mainDatabase.host}:27017/${config.mainDatabase.name}`;
+console.log(db_path);
 const db_config = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false,
   useCreateIndex: true
 };
 
