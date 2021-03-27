@@ -20,7 +20,7 @@ const schemaRegister = Joi.object({
   password: Joi.string().empty().required(),
   rol: Joi.string().empty().required(),
   selected: Joi.bool().allow(null),
-  selected: Joi.bool().allow(null)
+  active: Joi.bool().allow(null)
 });
 
 const schemaLogin = Joi.object({
