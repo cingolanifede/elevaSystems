@@ -33,7 +33,7 @@ let controller = {
       const newHist = await Historial.create(info);
 
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(newHist);
+      res.status(200).send(newHist);
       const body = falla + ', ' + cab.direccion_edificio;
       const push = await fcm.sendFCM(cab.owner, 'Falla detectada', body, info);
       console.log('Push --> ', push);
@@ -52,7 +52,7 @@ let controller = {
       }).countDocuments();
 
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json({
+      res.status(200).send({
         cab,
         totalHistorial
       });
@@ -70,7 +70,7 @@ let controller = {
     if (hist) {
       const result = await Historial.findById(historialId).populate('tecnicoId', '-password').populate('cabinaId');
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(result);
+      res.status(200).send(result);
     } else {
       return next(new error_types.Error404('Historial ' + historialId + ' not found'));
     }
@@ -82,7 +82,7 @@ let controller = {
         _id: id
       });
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json({
+      res.status(200).send({
         data: 'ok'
       });
 

@@ -7,7 +7,7 @@ let controller = {
   addCabina: async (req, res, next) => {
     const newCabina = await Cabina.create(req.body);
     res.setHeader('Content-Type', 'application/json');
-    res.status(200).json({
+    res.status(200).send({
       data: newCabina
     });
   },
@@ -18,7 +18,7 @@ let controller = {
         owner: empresaId
       }).populate('owner', '-password');
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(cab);
+      res.status(200).send(cab);
     } catch (error) {
       return next(new error_types.Error404(error));
     }
@@ -33,7 +33,7 @@ let controller = {
     if (cabina) {
       const result = await Cabina.findById(cabinaId).populate('owner','-password');
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(result);
+      res.status(200).send(result);
     } else {
       return next(new error_types.Error404('Cabina ' + cabinaId + ' not found'));
     }
@@ -45,7 +45,7 @@ let controller = {
         _id: id
       });
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json({
+      res.status(200).send({
         result: true
       });
 

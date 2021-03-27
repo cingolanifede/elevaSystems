@@ -19,6 +19,7 @@ const schemaRegister = Joi.object({
   email: Joi.string().required().email(),
   password: Joi.string().empty().required(),
   rol: Joi.string().empty().required(),
+  selected: Joi.bool().allow(null),
   selected: Joi.bool().allow(null)
 });
 
@@ -29,7 +30,7 @@ const schemaLogin = Joi.object({
 
 let controller = {
   health: (req, res, next) => {
-    return res.status(200).json({
+    return res.status(200).send({
       status:'online'
     });
   },
@@ -41,7 +42,7 @@ let controller = {
       const { error } = schemaRegister.validate(req.body);
 
       if (error) {
-        return res.status(400).json({
+        return res.status(400).send({
           error: error.details[0].message
         });
       }
@@ -60,7 +61,7 @@ let controller = {
       });
 
       if (isEmailExist) {
-        return res.status(400).json({
+        return res.status(400).send({
           error: 'email already exists'
         });
       } else {
@@ -79,7 +80,7 @@ let controller = {
         };
         // mail.sendMail();
         res.setHeader('Content-Type', 'application/json');
-        res.status(200).json({
+        res.status(200).send({
           response: result
         });
       }
@@ -93,19 +94,19 @@ let controller = {
       session: false
     }, (error, user) => {
       if (error || !user) {
-        return res.status(400).json({
+        return res.status(400).send({
           error: 'User login fail'
         });
       } else {
         const { error } = schemaLogin.validate(req.body);
 
         if (error) {
-          return res.status(400).json({
+          return res.status(400).send({
             error: error.details[0].message
           });
         }
         if (!user.active && user.rol == 'admin') {
-          return res.status(401).json({
+          return res.status(401).send({
             error: 'pending'
           });
         }
@@ -119,7 +120,7 @@ let controller = {
           expiresIn: config.config.jwtLifeTime // expires
         });
         user.password = undefined; //hide password
-        res.status(200).json({
+        res.status(200).send({
           response: {
             error: false,
             user,
@@ -149,7 +150,7 @@ let controller = {
     const result = await user.save();
     if (result) {
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(result);
+      res.status(200).send(result);
     } else {
       return next(new error_types.Error404('User ' + userId + ' not found'));
     }
@@ -159,7 +160,7 @@ let controller = {
       empresaId: req.params.id
     }).populate('empresaId', '-password');
     if (!user) {
-      return res.status(400).json({
+      return res.status(400).send({
         error: 'Users not found'
       });
     }
@@ -177,12 +178,12 @@ let controller = {
       _id: req.params.id
     }).populate('empresaId', '-password');
     if (!user) {
-      return res.status(400).json({
+      return res.status(400).send({
         error: 'User not found'
       });
     }
     res.setHeader('Content-Type', 'application/json');
-    res.status(200).json(user);
+    res.status(200).send(user);
   },
   editUser: async (req, res, next) => {
     const userId = req.params.id;
@@ -194,7 +195,7 @@ let controller = {
     if (user) {
       const result = await User.findById(userId).populate('empresaId', '-password');
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json(result);
+      res.status(200).send(result);
     } else {
       return next(new error_types.Error404('Tecnico ' + userId + ' not found'));
     }
@@ -205,7 +206,7 @@ let controller = {
         _id: req.params.id
       });
       res.setHeader('Content-Type', 'application/json');
-      res.status(200).json({
+      res.status(200).send({
         data: 'ok'
       });
 
