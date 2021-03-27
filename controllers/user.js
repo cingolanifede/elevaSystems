@@ -116,7 +116,7 @@ let controller = {
           rol: user.rol
         };
 
-        const token = jwt.sign(payload, config.config.jwtLifeTime, {
+        const token = jwt.sign(payload, config.config.tokenSecret, {
           expiresIn: config.config.jwtLifeTime // expires
         });
         user.password = undefined; //hide password
