@@ -8,7 +8,7 @@ const historialController = require('../controllers/historial');
 const version = 'v1';
 
 /*** Health* */
-router.post(`/${version}/health`, userController.health);
+router.get(`/${version}/health`, userController.health);
 
 /** Users */
 router.post(`/${version}/auth`, userController.login);
