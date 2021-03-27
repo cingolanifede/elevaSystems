@@ -47,32 +47,12 @@ let controller = {
         });
       }
 
-      const {
-        email,
-        password,
-        firstName,
-        lastName,
-        rol,
-        empresaId,
-        owner
-      } = req.body;
-      const isEmailExist = await User.findOne({
-        email
-      });
+      const { email, password, firstName, lastName, rol, empresaId, selected, active } = req.body;
 
-      if (isEmailExist) {
-        return res.status(400).send({
-          error: 'email already exists'
-        });
+      if (await User.findOne({ email })) {
+        return res.status(400).send({ error: 'email already exists' });
       } else {
-        const user = await User.create({
-          email,
-          password,
-          firstName,
-          lastName,
-          empresaId,
-          rol
-        });
+        const user = await User.create({ email, password, firstName, lastName, rol, empresaId, selected, active });
         const result = {
           error: false,
           message: 'Signup successful',
