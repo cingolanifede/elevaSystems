@@ -14,7 +14,7 @@ const Mdw = require('../middleware/custom');
  * Get port from environment and store in Express.
  */
 
-const port = config.PORT;
+const port = config.config.port;
 app.set('port', port);
 
 /**

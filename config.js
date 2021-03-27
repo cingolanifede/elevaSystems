@@ -30,7 +30,8 @@ const required = [
   const config = {
     env: process.env['NODE_ENV'],
     tokenSecret: process.env['TOKEN_SECRET'],
-    jwtLifeTime: process.env['JWT_LIFETIME']
+    jwtLifeTime: process.env['JWT_LIFETIME'],
+    port:3000
   };
   
   const mainDatabase = {
@@ -40,8 +41,5 @@ const required = [
     name: process.env['DB_MAIN_NAME']
   };
   
-  module.exports = {
-    PORT: process.env.PORT || 3000
-  };  
   module.exports = { config, mainDatabase };
   
