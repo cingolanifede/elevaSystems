@@ -117,7 +117,7 @@ let controller = {
         };
 
         const token = jwt.sign(payload, config.config.tokenSecret, {
-          expiresIn: config.config.jwtLifeTime // expires
+          expiresIn: 60 * 60 * 24 * 10 // expires in 10 days
         });
         user.password = undefined; //hide password
         res.status(200).send({
