@@ -167,11 +167,8 @@ let controller = {
   },
   editUser: async (req, res, next) => {
     const userId = req.params.id;
-    const user = await User.findOneAndUpdate({
-      _id: userId
-    }, req.body, {
-      upsert: true
-    });
+    const { password, firstName, lastName, selected, active } = req.body;
+    const user = await User.updateOne({ _id: userId }, { password, firstName, lastName, selected, active });
     if (user) {
       const result = await User.findById(userId).populate('empresaId', '-password');
       res.setHeader('Content-Type', 'application/json');

@@ -7,8 +7,8 @@ console.log(db_path);
 const db_config = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
+  useCreateIndex: true,
+  useFindAndModify: false
 };
 
 async function connectDb() {

@@ -66,6 +66,12 @@ app.use(tokenValidation);
 app.use(acl.authorize);
 
 //conectamos todos los routers
+app.use('/health', (req, res) => {
+    res.status(200).json({
+      data: 'online'
+    });
+});
+
 app.use('/', index_routes);
 
 module.exports = app;
