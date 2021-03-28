@@ -1,39 +1,13 @@
 version: '3.7'
 x-common-variables: &common-variables
   NODE_ENV: local
-  DB_MAIN_HOST: db
+  DB_MAIN_HOST: mongo
   DB_MAIN_USER: root
   DB_MAIN_PASS: pass12345
   DB_MAIN_NAME: eleva
   TOKEN_SECRET: elevasystems
 
 services:
-  local:
-    build:
-      context: .
-      target: builder
-    image: elevasystems-backend
-    volumes:
-      - ./:/app/
-    container_name: elevasystems-backend_local
-    environment: *common-variables
-    depends_on:
-      - db
-    ports:
-      - 3100:3100
-      - 3000:3000
-    tty: true
-    command: /bin/sh -c "npm install && npm run start-dev"
-
-  db:
-    image: mongo
-    container_name: elevasystems-database-mongo
-    restart: unless-stopped
-    ports:
-      - 27017:27017
-    volumes:
-      - ~/./dbdata:/data/db
-
   nginx-proxy:
     image: jwilder/nginx-proxy
     restart: always
@@ -58,22 +32,51 @@ services:
       - vhostd:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
       - /var/run/docker.sock:/var/run/docker.sock:ro
-  
+
   www:
     image: nginx
     restart: always
     expose:
       - "80"
     volumes:
-      - ~/./nginx/html:/usr/share/nginx/html
+      - ~/./html:/usr/share/nginx/html:ro
     environment:
-      - VIRTUAL_HOST=elevasystems.com.ar,www.elevasystems.com.ar
-      - LETSENCRYPT_HOST=elevasystems.com.ar,www.elevasystems.com.ar
+      - VIRTUAL_HOST=elevasystems.com.ar
+      - LETSENCRYPT_HOST=elevasystems.com.ar
       - LETSENCRYPT_EMAIL=cingolanifede@elevasystems.com.ar
     depends_on:
       - nginx-proxy
       - letsencrypt
+
+  local:
+    build:
+      context: .
+      target: builder
+    image: elevasystems-backend
+    volumes:
+      - ./:/app/
+    container_name: elevasystems-backend_local
+    environment: *common-variables
+    depends_on:
+      - mongo
+    ports:
+      - 3000:3000
+    tty: true
+    restart: unless-stopped
+    command: /bin/sh -c "npm install && npm run start-dev"
+
+  mongo:
+    image: mongo
+    container_name: elevasystems-database-mongo
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    volumes:
+      - database:/data/db
+
+
 volumes: 
   certs:
   html:
   vhostd:
+  database:
