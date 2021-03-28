@@ -19,8 +19,8 @@ services:
     depends_on:
       - db
     ports:
-      - '3100:3100'
-      - '3000:3000'
+      - 3100:3100
+      - 3000:3000
     tty: true
     command: /bin/sh -c "npm install && npm run start-dev"
 
@@ -32,6 +32,15 @@ services:
       - 27017:27017
     volumes:
       - ~/./dbdata:/data/db
+
+  webserver: 
+    container_name: elevasystems-webserver
+    image: "nginx:alpine"
+    ports: 
+      - 80:80
+      - 443:443
+    restart: unless-stopped
+    tty: true
 
 networks:
   default:
