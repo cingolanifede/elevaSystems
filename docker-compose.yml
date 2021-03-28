@@ -6,6 +6,7 @@ x-common-variables: &common-variables
   DB_MAIN_PASS: pass12345
   DB_MAIN_NAME: eleva
   TOKEN_SECRET: elevasystems
+
 services:
   local:
     build:
@@ -33,15 +34,46 @@ services:
     volumes:
       - ~/./dbdata:/data/db
 
-  webserver: 
-    container_name: elevasystems-webserver
-    image: "nginx:alpine"
-    ports: 
-      - 80:80
-      - 443:443
-    restart: unless-stopped
-    tty: true
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - certs:/etc/nginx/certs:ro
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+    labels:
+      - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
 
-networks:
-  default:
-    name: elevasystems-backend
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    restart: always
+    environment:
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    volumes:
+      - certs:/etc/nginx/certs:rw
+      - vhostd:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+  
+  www:
+    image: nginx
+    restart: always
+    expose:
+      - "80"
+    volumes:
+      - ~/./nginx/html:/usr/share/nginx/html
+    environment:
+      - VIRTUAL_HOST=elevasystems.com.ar,www.elevasystems.com.ar
+      - LETSENCRYPT_HOST=elevasystems.com.ar,www.elevasystems.com.ar
+      - LETSENCRYPT_EMAIL=cingolanifede@elevasystems.com.ar
+    depends_on:
+      - nginx-proxy
+      - letsencrypt
+volumes: 
+  certs:
+  html:
+  vhostd:
