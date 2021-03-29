@@ -80,6 +80,6 @@ app.use('/health', (req, res) => {
     });
 });
 
-app.use('/', index_routes);
+app.use('/', cors(corsOptions), index_routes);
 
 module.exports = app;
