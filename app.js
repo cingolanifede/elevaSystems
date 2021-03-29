@@ -34,11 +34,19 @@ let responseObject = {
 acl.config(configObject, responseObject);
 
 //Cors para toda la app con '*'
-var corsOptions = {
-  origin: '*', // Reemplazar con dominio
-  optionsSuccessStatus: 200
+// Reflect the origin if it's in the allowed list or not defined (cURL, Postman, etc.)
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origin not allowed by CORS'));
+    }
+  }
 };
-app.use(cors(corsOptions));
+
+// Enable preflight requests for all routes
+app.options('*', cors(corsOptions));
 
 //conectamos todos los middleware de terceros
 app.use(logger('dev')); //for develop
