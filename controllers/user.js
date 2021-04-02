@@ -58,7 +58,22 @@ let controller = {
           message: 'Signup successful',
           user
         };
-        sendMail();
+        let obj = {};
+        const text={
+          user: {
+            rol: "admin",
+            active: true,
+            _id: "60674109b4413f0028179215",
+            firstName: "Federico",
+            lastName: "Cingolani"
+          }
+        };
+
+        obj.to = user.email;
+        obj.subject ='Usuario registrado';
+        obj.text = text;
+       
+        sendMail(obj);
         res.setHeader('Content-Type', 'application/json');
         res.status(200).send({
           response: result
