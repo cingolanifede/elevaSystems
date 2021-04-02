@@ -35,7 +35,9 @@ acl.config(configObject, responseObject);
 
 //Cors para toda la app con '*'
 // Reflect the origin if it's in the allowed list or not defined (cURL, Postman, etc.)
+/*
 const allowedOrigins = [
+  '*',
   'capacitor://localhost',
   'ionic://localhost',
   'http://localhost',
@@ -52,9 +54,16 @@ const corsOptions = {
     }
   }
 };
-
+*/
 // Enable preflight requests for all routes
-app.options('*', cors(corsOptions));
+//app.options('*', cors(corsOptions));
+
+//Cors para toda la app con '*'
+var corsOptions = {
+  origin: '*', // Reemplazar con dominio
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 
 //conectamos todos los middleware de terceros
 app.use(logger('dev')); //for develop
@@ -88,6 +97,6 @@ app.use('/health', (req, res) => {
     });
 });
 
-app.use('/', cors(corsOptions), index_routes);
+app.use('/', index_routes);
 
 module.exports = app;
