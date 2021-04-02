@@ -11,16 +11,14 @@ const UserSchema = new Schema({
         type: String
     },
     email: {
-        type: String
+        type: String,
+        required: true,
+        unique: true
     },
     password: {
         type: String,
         default: 'user'
     },
-    username:{
-	type:String
-    },
-    facebookId: String,
     rol: {
         type: String,
         default: 'admin'

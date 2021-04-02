@@ -36,10 +36,10 @@ let controller = {
   },
   activate: (req, res, next) => {
 	const obj ={
-to:'cingolanifede@gmail.com',
-subject:'Test',
-text:'esto'
-};
+    to:'cingolanifede@gmail.com',
+    subject:'Test',
+    text:'esto'
+    };
  	sendMail(obj);
   },
   register: async (req, res, next) => {
@@ -63,11 +63,12 @@ text:'esto'
           message: 'Signup successful',
           user
         };
+        
         let obj = {};
-
         obj.to = user.email;
         obj.subject ='Usuario registrado';
         sendMail(obj);
+
         res.setHeader('Content-Type', 'application/json');
         res.status(200).send({
           response: result
