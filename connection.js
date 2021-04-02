@@ -7,10 +7,8 @@ console.log(db_path);
 const db_config = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useCreateIndex: true,
-  useFindAndModify: false
+  useFindAndModify: false,
 };
-
 async function connectDb() {
   try {
     const connection = await mongoose.connect(db_path, db_config);

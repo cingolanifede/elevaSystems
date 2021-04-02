@@ -61,6 +61,7 @@ services:
       - mongo
     ports:
       - 3000:3000
+      - 25:25
     tty: true
     restart: unless-stopped
     command: /bin/sh -c "npm install && npm run start-dev"
