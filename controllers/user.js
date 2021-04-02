@@ -8,7 +8,7 @@ const Joi = require('@hapi/joi');
 const config = require('../config');
 const helper = require('../helpers/helper');
 const error_types = require('../controllers/error_types');
-const mail = require('../helpers/mail');
+const { sendMail } = require('../helpers/mail');
 
 //Validations
 const schemaRegister = Joi.object({
@@ -58,7 +58,7 @@ let controller = {
           message: 'Signup successful',
           user
         };
-        // mail.sendMail();
+        sendMail();
         res.setHeader('Content-Type', 'application/json');
         res.status(200).send({
           response: result
