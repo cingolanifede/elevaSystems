@@ -13,10 +13,7 @@ let controller = {
     if (cab == null) {
       return next(new error_types.Error404('Cabina not found.'));
     } else {
-      const {
-        signal_strenght,
-        batery_voltage
-      } = sb.split('-');
+      const { signal_strenght, batery_voltage } = sb.split('-');
       const falla = Fail.fallas2String(evento);
       const info = {
         cabinaId: cab._id,
@@ -34,9 +31,16 @@ let controller = {
 
       res.setHeader('Content-Type', 'application/json');
       res.status(200).send(newHist);
-      const body = falla + ', ' + cab.direccion_edificio;
-      const push = await fcm.sendFCM(cab.owner, 'Falla detectada', body, info);
-      console.log('Push --> ', push);
+
+      if (cab._id !== undefined) {
+      	const body = falla + ', ' + cab.direccion_edificio;
+	const idEmpresa = cab._id.toString();
+	console.log(idEmpresa);
+      	const lastFive = idEmpresa.slice(idEmpresa.length - 5);
+      	const format =`eleva${lastFive}`;
+      	console.log(format);
+      	const push = await fcm.sendFCM(format, 'Falla detectada', body, info); 
+      }
     }
   },
   getHistorial: async (req, res, next) => {
