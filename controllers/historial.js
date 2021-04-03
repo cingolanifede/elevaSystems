@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Cabina = require('../models/cabinas');
 const Historial = require('../models/historial');
 const error_types = require('../controllers/error_types');
-const fcm = require('../helpers/fcm');
+const { sendFCM } = require('../helpers/fcm');
 const Fail = require('../helpers/fail');
 
 let controller = {
@@ -32,14 +32,10 @@ let controller = {
       res.setHeader('Content-Type', 'application/json');
       res.status(200).send(newHist);
 
-      if (cab._id !== undefined) {
+      if (newHist.empresaId !== undefined) {
       	const body = falla + ', ' + cab.direccion_edificio;
-	const idEmpresa = cab._id.toString();
-	console.log(idEmpresa);
-      	const lastFive = idEmpresa.slice(idEmpresa.length - 5);
-      	const format =`eleva${lastFive}`;
-      	console.log(format);
-      	const push = await fcm.sendFCM(format, 'Falla detectada', body, info); 
+      	console.log(newHist.empresaId);
+	const push = await sendFCM(newHist.empresaId.toString(), 'Falla detectada', body, info);
       }
     }
   },

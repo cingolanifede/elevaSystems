@@ -29,7 +29,8 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^5.0.1",
     "pug": "2.0.0-beta11",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "fcm-node": "1.6.1"
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
