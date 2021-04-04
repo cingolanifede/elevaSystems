@@ -31,6 +31,10 @@ const UserSchema = new Schema({
     active: {
         type: Boolean,
         default: false
+    },
+    mode: {
+        type: String,
+        default: 'A'
     }
 }, {
     timestamps: true
