@@ -191,8 +191,8 @@ let controller = {
   },
   editUser: async (req, res, next) => {
     const userId = req.params.id;
-    const { password, firstName, lastName, selected, active } = req.body;
-    const user = await User.updateOne({ _id: userId }, { password, firstName, lastName, selected, active });
+    const {password, firstName, lastName, selected, active, mode  } = req.body;
+    const user = await User.updateOne({ _id: userId }, { password, firstName, lastName, selected, active, mode });
     if (user) {
       const result = await User.findById(userId).populate('empresaId', '-password');
       
