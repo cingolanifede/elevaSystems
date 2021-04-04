@@ -34,13 +34,22 @@ let controller = {
       status:'online'
     });
   },
-  activate: (req, res, next) => {
-	const obj ={
-    to:'cingolanifede@gmail.com',
-    subject:'Test',
-    text:'esto'
-    };
- 	sendMail(obj);
+  activate: async (req, res, next) => {
+    const { email } = req.params;
+    if (!email) {
+      return res.status(404).send({
+        error: 'email does not exist'
+      });
+    }
+    const user = await User.find({ email: email });
+    if (user){
+      const result = await User.updateOne({ email:email}, { active:true });
+      res.status(200).send(result);
+    }else{
+      return res.status(404).send({
+        error: 'email does not exist'
+      });
+    }
   },
   register: async (req, res, next) => {
     try {
