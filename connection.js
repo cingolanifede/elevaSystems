@@ -7,7 +7,7 @@ console.log(db_path);
 const db_config = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-  useFindAndModify: false,
+  useFindAndModify: true
 };
 async function connectDb() {
   try {

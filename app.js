@@ -9,8 +9,6 @@ const config = require('./config');
 const mongoDb = require('./connection');
 const tokenValidation = require('./middleware/token.middleware');
 
-require('./authentication');
-
 const index_routes = require('./routes/index');
 
 //mongoDB connection
@@ -32,31 +30,6 @@ let responseObject = {
 };
 
 acl.config(configObject, responseObject);
-
-//Cors para toda la app con '*'
-// Reflect the origin if it's in the allowed list or not defined (cURL, Postman, etc.)
-/*
-const allowedOrigins = [
-  '*',
-  'capacitor://localhost',
-  'ionic://localhost',
-  'http://localhost',
-  'http://localhost:8080',
-  'http://localhost:8100'
-];
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Origin not allowed by CORS'));
-    }
-  }
-};
-*/
-// Enable preflight requests for all routes
-//app.options('*', cors(corsOptions));
 
 //Cors para toda la app con '*'
 var corsOptions = {

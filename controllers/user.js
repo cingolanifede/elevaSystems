@@ -51,7 +51,7 @@ let controller = {
       });
     }
   },
-  register: async (req, res, next) => {
+  register: async (req, res) => {
     try {
       const { error } = schemaRegister.validate(req.body);
 
@@ -62,6 +62,12 @@ let controller = {
       }
 
       const { email, password, firstName, lastName, rol, empresaId, selected, active } = req.body;
+
+      if (!email || !password) {
+        return res.status(404).send({
+          error:'missing data'
+        });
+      }
 
       if (await User.findOne({ email })) {
         return res.status(400).send({ error: 'email already exists' });
@@ -78,56 +84,58 @@ let controller = {
         obj.subject ='Usuario registrado';
         sendMail(obj);
 
-        res.setHeader('Content-Type', 'application/json');
+        
         res.status(200).send({
           response: result
         });
       }
     } catch (error) {
-      next(error);
+      res.status(500).send(error);
     }
   },
-  login: (req, res, next) => {
+  login: async(req, res, next) => {
     console.log('login');
-    passport.authenticate('local', {
-      session: false
-    }, (error, user) => {
-      if (error || !user) {
-        return res.status(400).send({
-          error: 'User login fail'
-        });
-      } else {
-        const { error } = schemaLogin.validate(req.body);
+    const { error } = schemaLogin.validate(req.body);
 
-        if (error) {
-          return res.status(400).send({
-            error: error.details[0].message
-          });
-        }
-        if (!user.active && user.rol == 'admin') {
-          return res.status(401).send({
-            error: 'pending'
-          });
-        }
-        const payload = {
-          id: user._id,
-          email: user.email,
-          rol: user.rol
-        };
+    if (error) {
+      return res.status(400).send({
+        error: error.details[0].message
+      });
+    }
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).send({
+        error: 'email does not exist'
+      });
+    }
+    if (!await user.isValidPassword(password)) {
+      return res.status(404).send({error: 'not valid password' });
+    }
 
-        const token = jwt.sign(payload, config.config.tokenSecret, {
-          expiresIn: 60 * 60 * 24 * 10 // expires in 10 days
-        });
-        user.password = undefined; //hide password
-        res.status(200).send({
-          response: {
-            error: false,
-            user,
-            token
-          }
-        });
+    if (!user.active && user.rol == 'admin') {
+      return res.status(401).send({
+        error: 'pending'
+      });
+    }
+
+    const payload = {
+      id: user._id,
+      email: user.email,
+      rol: user.rol
+    };
+
+    const token = jwt.sign(payload, config.config.tokenSecret, {
+      expiresIn: 60 * 60 * 24 * 10 // expires in 10 days
+    });
+    user.password = undefined; //hide password
+    res.status(200).send({
+      response: {
+        error: false,
+        user,
+        token
       }
-    })(req, res);
+    });
   },
   changePsw: async (req, res, next) => {
     const userId = req.params.id;
@@ -139,16 +147,14 @@ let controller = {
     if (!user) {
       return next(new error_types.Error404('User ' + userId + ' not found'));
     }
-    const validPassword = await user.isValidPassword(oldP);
-    console.log(validPassword);
-    if (!validPassword) {
+
+    if (!await user.isValidPassword(oldP)) {
       return next(new error_types.Error404('Password ingresado no corresponde'));
     }
     const hash = await bcrypt.hash(newP, 10);
     user.password = hash;
     const result = await user.save();
     if (result) {
-      res.setHeader('Content-Type', 'application/json');
       res.status(200).send(result);
     } else {
       return next(new error_types.Error404('User ' + userId + ' not found'));
@@ -169,7 +175,6 @@ let controller = {
       const response = await helper.deleteObj(user[i].toObject());
       allData.push(response);
     }
-    res.setHeader('Content-Type', 'application/json');
     return res.status(200).send(await Promise.all(allData));
   },
   getprofile: async (req, res, next) => {
@@ -181,7 +186,7 @@ let controller = {
         error: 'User not found'
       });
     }
-    res.setHeader('Content-Type', 'application/json');
+    
     res.status(200).send(user);
   },
   editUser: async (req, res, next) => {
@@ -190,7 +195,7 @@ let controller = {
     const user = await User.updateOne({ _id: userId }, { password, firstName, lastName, selected, active });
     if (user) {
       const result = await User.findById(userId).populate('empresaId', '-password');
-      res.setHeader('Content-Type', 'application/json');
+      
       res.status(200).send(result);
     } else {
       return next(new error_types.Error404('Tecnico ' + userId + ' not found'));
@@ -201,7 +206,7 @@ let controller = {
       await User.findOneAndDelete({
         _id: req.params.id
       });
-      res.setHeader('Content-Type', 'application/json');
+      
       res.status(200).send({
         data: 'ok'
       });
