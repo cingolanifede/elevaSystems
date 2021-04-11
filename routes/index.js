@@ -12,7 +12,7 @@ router.get(`/${version}/health`, userController.health);
 
 /** Users */
 router.post(`/${version}/auth`, userController.login);
-router.post(`/${version}/activate/:email`, userController.activate);
+router.get(`/${version}/activate/:email`, userController.activate);
 
 router.post(`/${version}/users`, userController.register);
 router.get(`/${version}/users/:id`, userController.getAll);
