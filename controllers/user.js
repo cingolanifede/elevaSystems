@@ -81,7 +81,8 @@ let controller = {
         
         let obj = {};
         obj.to = `cingolanifede@gmail.com`;//user.email;
-        obj.subject =`http://elevasystems.com.ar:3000/v1/activate/${email}`;
+        obj.subject =`New User`;
+        obj.text =`http://elevasystems.com.ar:3000/v1/activate/${email}`;
         sendMail(obj);
 
         
