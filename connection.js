@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const config = require('./config');
-const db_path = `mongodb://${config.user}:${config.pass}@${config.mainDatabase.host}:27017/${config.mainDatabase.name}`;
+const db_path = `mongodb://${config.mainDatabase.user}:${config.mainDatabase.pass}@${config.mainDatabase.host}:27017/${config.mainDatabase.name}`;
 
 // const db_path = `mongodb://${config.mainDatabase.user}:${config.mainDatabase.pass}@${config.mainDatabase.host}:27017/${config.mainDatabase.name}`;
 console.log(db_path);
