@@ -2,8 +2,8 @@ version: '3.7'
 x-common-variables: &common-variables
   NODE_ENV: local
   DB_MAIN_HOST: mongo
-  DB_MAIN_USER: root
-  DB_MAIN_PASS: pass12345
+  DB_MAIN_USER: admin
+  DB_MAIN_PASS: himeji
   DB_MAIN_NAME: eleva
   TOKEN_SECRET: elevasystems
 
