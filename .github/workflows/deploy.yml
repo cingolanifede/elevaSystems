@@ -16,4 +16,4 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd elevaSystems
-            git clone https://github.com/cingolanifede/elevaSystems.git
+            git@github.com:cingolanifede/elevaSystems.git
