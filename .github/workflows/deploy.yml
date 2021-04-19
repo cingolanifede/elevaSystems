@@ -15,5 +15,5 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            whoami
-            ls -al
+            cd elevaSystems
+            git clone https://github.com/cingolanifede/elevaSystems.git
