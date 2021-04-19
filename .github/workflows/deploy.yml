@@ -17,3 +17,4 @@ jobs:
           script: |
             cd elevaSystems
             ${{ secrets.SCRIPT}}
+            docker-compose up -d
