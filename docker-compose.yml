@@ -1,11 +1,11 @@
 version: '3.7'
 x-common-variables: &common-variables
   NODE_ENV: local
-  DB_MAIN_HOST: mongo
-  DB_MAIN_USER: adminCingolani
-  DB_MAIN_PASS: cingolani481
-  DB_MAIN_NAME: eleva
-  TOKEN_SECRET: elevasystems
+  DB_MAIN_HOST: ${DB_MAIN_HOST}
+  DB_MAIN_USER: ${DB_MAIN_USER}
+  DB_MAIN_PASS: ${DB_MAIN_PASS}
+  DB_MAIN_NAME: ${DB_MAIN_NAME}
+  TOKEN_SECRET: ${TOKEN_SECRET}
 
 services:
   nginx-proxy:
