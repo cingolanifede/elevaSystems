@@ -6,6 +6,10 @@ x-common-variables: &common-variables
   DB_MAIN_PASS: ${DB_MAIN_PASS}
   DB_MAIN_NAME: ${DB_MAIN_NAME}
   TOKEN_SECRET: ${TOKEN_SECRET}
+  VIRTUAL_PORT: 3000
+  VIRTUAL_HOST: elevasystems.com.ar,www.elevasystems.com.ar
+  LETSENCRYPT_HOST: elevasystems.com.ar,www.elevasystems.com.ar
+  LETSENCRYPT_EMAIL: cingolanifede@elevasystems.com.ar
 
 services:
   nginx-proxy:
@@ -13,7 +17,6 @@ services:
     restart: always
     ports:
       - "80:80"
-      - "8080:8080"
       - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
@@ -60,9 +63,11 @@ services:
     environment: *common-variables
     depends_on:
       - mongo
-    ports:
-      - 3000:3000
-      - 25:25
+      - nginx-proxy
+      - letsencrypt
+    expose:
+      - "3000"
+      - "25"
     tty: true
     restart: unless-stopped
     command: /bin/sh -c "npm install && npm run start-dev"
