@@ -1,4 +1,5 @@
 version: '3.7'
+<<<<<<< HEAD
 x-common-variables: &common-variables
   NODE_ENV: local
   DB_MAIN_HOST: ${DB_MAIN_HOST}
@@ -11,6 +12,8 @@ x-common-variables: &common-variables
   LETSENCRYPT_HOST: api.elevasystems.com.ar,www.api.elevasystems.com.ar
   LETSENCRYPT_EMAIL: cingolanifede@elevasystems.com.ar
 
+=======
+>>>>>>> 50e74a29ca7220682d685ff6c8725f311e81d3bb
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
@@ -62,17 +65,27 @@ services:
       - ./:/app/
     container_name: elevasystems-backend_local
     environment:
+<<<<<<< HEAD
       - VIRTUAL_PORT=3000
       - VIRTUAL_HOST=api.elevasystems.com.ar,www.api.elevasystems.com.ar
       - LETSENCRYPT_HOST=api.elevasystems.com.ar,www.api.elevasystems.com.ar
       - LETSENCRYPT_EMAIL=cingolanifede@elevasystems.com.ar
+=======
+>>>>>>> 50e74a29ca7220682d685ff6c8725f311e81d3bb
       - NODE_ENV=local
       - DB_MAIN_HOST=${DB_MAIN_HOST}
       - DB_MAIN_USER=${DB_MAIN_USER}
       - DB_MAIN_PASS=${DB_MAIN_PASS}
       - DB_MAIN_NAME=${DB_MAIN_NAME}
       - TOKEN_SECRET=${TOKEN_SECRET}
+<<<<<<< HEAD
 
+=======
+      - VIRTUAL_PORT=3000
+      - VIRTUAL_HOST=api.elevasystems.com.ar
+      - LETSENCRYPT_HOST=api.elevasystems.com.ar
+      - LETSENCRYPT_EMAIL=cingolanifede@elevasystems.com.ar
+>>>>>>> 50e74a29ca7220682d685ff6c8725f311e81d3bb
     depends_on:
       - mongo
       - nginx-proxy
