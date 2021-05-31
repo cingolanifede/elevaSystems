@@ -7,8 +7,8 @@ x-common-variables: &common-variables
   DB_MAIN_NAME: ${DB_MAIN_NAME}
   TOKEN_SECRET: ${TOKEN_SECRET}
   VIRTUAL_PORT: 3000
-  VIRTUAL_HOST: elevasystems.com.ar,www.elevasystems.com.ar
-  LETSENCRYPT_HOST: elevasystems.com.ar,www.elevasystems.com.ar
+  VIRTUAL_HOST: api.elevasystems.com.ar
+  LETSENCRYPT_HOST: api.elevasystems.com.ar
   LETSENCRYPT_EMAIL: cingolanifede@elevasystems.com.ar
 
 services:
