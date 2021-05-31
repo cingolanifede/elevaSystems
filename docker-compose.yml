@@ -1,16 +1,4 @@
 version: '3.7'
-x-common-variables: &common-variables
-  NODE_ENV: local
-  DB_MAIN_HOST: ${DB_MAIN_HOST}
-  DB_MAIN_USER: ${DB_MAIN_USER}
-  DB_MAIN_PASS: ${DB_MAIN_PASS}
-  DB_MAIN_NAME: ${DB_MAIN_NAME}
-  TOKEN_SECRET: ${TOKEN_SECRET}
-  VIRTUAL_PORT: 3000
-  VIRTUAL_HOST: api.elevasystems.com.ar
-  LETSENCRYPT_HOST: api.elevasystems.com.ar
-  LETSENCRYPT_EMAIL: cingolanifede@elevasystems.com.ar
-
 services:
   nginx-proxy:
     image: jwilder/nginx-proxy
