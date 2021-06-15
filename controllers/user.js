@@ -31,7 +31,7 @@ const schemaLogin = Joi.object({
 let controller = {
   health: (req, res, next) => {
     return res.status(200).send({
-      status:'online'
+      status:'the api is online'
     });
   },
   activate: async (req, res, next) => {
