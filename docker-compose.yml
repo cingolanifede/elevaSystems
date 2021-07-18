@@ -41,21 +41,24 @@ services:
       - letsencrypt
 
   jenkins:
+    build:
+      context: pipeline
     container_name: jenkins
-    image: jenkins/jenkins
     environment:
-      - NODE_ENV=local
-      - VIRTUAL_PORT=8081
+      - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=jenkins.elevasystems.com.ar
       - LETSENCRYPT_HOST=jenkins.elevasystems.com.ar
       - LETSENCRYPT_EMAIL=cingolanifede@elevasystems.com.ar
     depends_on:
       - nginx-proxy
       - letsencrypt
+    expose:
+      - "8080"
     ports:
-      - "8081:8080"
+      - 8080:8080
     volumes:
       - $PWD/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
 
   local:
     build:
