@@ -44,6 +44,7 @@ services:
     build:
       context: pipeline
     container_name: jenkins
+    restart: always
     environment:
       - VIRTUAL_PORT=8080
       - VIRTUAL_HOST=jenkins.elevasystems.com.ar
@@ -61,40 +62,10 @@ services:
       - $PWD/jenkins_home/log:/var/log
       - /var/run/docker.sock:/var/run/docker.sock
 
-  local:
-    build:
-      context: .
-      target: builder
-    image: elevasystems-backend
-    volumes:
-      - ./:/app/
-    container_name: elevasystems-backend_local
-    environment:
-      - NODE_ENV=local
-      - DB_MAIN_HOST=${DB_MAIN_HOST}
-      - DB_MAIN_USER=${DB_MAIN_USER}
-      - DB_MAIN_PASS=${DB_MAIN_PASS}
-      - DB_MAIN_NAME=${DB_MAIN_NAME}
-      - TOKEN_SECRET=${TOKEN_SECRET}
-      - VIRTUAL_PORT=3000
-      - VIRTUAL_HOST=api.elevasystems.com.ar
-      - LETSENCRYPT_HOST=api.elevasystems.com.ar
-      - LETSENCRYPT_EMAIL=cingolanifede@elevasystems.com.ar
-    depends_on:
-      - mongo
-      - nginx-proxy
-      - letsencrypt
-    expose:
-      - "3000"
-      - "25"
-    tty: true
-    restart: unless-stopped
-    command: /bin/sh -c "npm install && npm run start-dev"
-
   mongo:
     image: mongo
     container_name: elevasystems-database-mongo
-    restart: unless-stopped
+    restart: always
     ports:
       - 27017:27017
     volumes:
