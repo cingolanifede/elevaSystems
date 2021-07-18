@@ -17,7 +17,7 @@ pipeline {
             {
                 script {
                         echo "INFO: Build Stage"
-                        sh "docker build -t elevasystems-backend:latest ."
+                        sh "docker build -t elevasystems-backend ."
                         echo "INFO: Docker image built"
                     }
             }
@@ -29,7 +29,7 @@ pipeline {
             {
                 script {
                         echo "INFO: Running new Docker image"
-                        sh "docker rm -f elevasystems-backend_local || true"
+                        sh "docker rm -f elevasystems-backend-api || true"
                         sh "docker run -d --restart always \
                         -e NODE_ENV='local' \
                         -e DB_MAIN_HOST='${DB_MAIN_HOST}' \
@@ -43,7 +43,7 @@ pipeline {
                         -e LETSENCRYPT_EMAIL='cingolanifede@elevasystems.com.ar' \
                         --expose 3000 \
                         --expose 25 \
-                        --name elevasystems-backend_local elevasystems-backend:latest"
+                        --name elevasystems-backend-api elevasystems-backend"
                         echo "INFO: Deployed"
                     }
             }
