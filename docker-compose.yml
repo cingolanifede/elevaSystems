@@ -58,6 +58,7 @@ services:
       - 8080:8080
     volumes:
       - $PWD/jenkins_home:/var/jenkins_home
+      - $PWD/jenkins_home/log:/var/log
       - /var/run/docker.sock:/var/run/docker.sock
 
   local:
