@@ -43,7 +43,7 @@ pipeline {
                         -e LETSENCRYPT_EMAIL='cingolanifede@elevasystems.com.ar' \
                         --expose 3000 \
                         --expose 25 \
-                        --network elevaNetwork \
+                        --network eleva-config_elevaNetwork \
                         --name elevasystems-backend-api elevasystems-backend"
                         echo "INFO: Deployed"
                     }
