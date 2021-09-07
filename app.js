@@ -63,6 +63,19 @@ app.use(tokenValidation);
 /* ACL middleware */
 app.use(acl.authorize);
 
+// Healthcheck
+app.get('/notifications', (req, res) => {
+  console.log(req);
+  res.send(req.body);
+});
+
+//conectamos todos los routers
+app.use('/notications', (req, res) => {
+  res.status(200).json({
+    data: 'ok'
+  });
+});
+
 //conectamos todos los routers
 app.use('/health', (req, res) => {
     res.status(200).json({
